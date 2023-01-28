@@ -1,4 +1,4 @@
-package park.waiting.user;
+package park.waiting.domain.user;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

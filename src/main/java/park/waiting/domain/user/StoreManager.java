@@ -1,10 +1,10 @@
-package park.waiting.user;
+package park.waiting.domain.user;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import park.waiting.store.Store;
+import park.waiting.domain.store.Store;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

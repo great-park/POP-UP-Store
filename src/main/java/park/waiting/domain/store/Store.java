@@ -1,8 +1,8 @@
-package park.waiting.store;
+package park.waiting.domain.store;
 
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import park.waiting.store.status.OpenStatus;
+import park.waiting.domain.store.status.OpenStatus;
 
 import javax.persistence.*;
 
