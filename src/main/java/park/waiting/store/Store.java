@@ -1,15 +1,14 @@
 package park.waiting.store;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import park.waiting.store.status.OpenStatus;
 
 import javax.persistence.*;
 
 @Getter
-@Setter
+@ToString
+@EqualsAndHashCode
 @Builder
 @Entity
 @EntityListeners(AuditingEntityListener.class)

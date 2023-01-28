@@ -9,7 +9,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
+@ToString
+@EqualsAndHashCode
 @Builder
 @Entity
 @EntityListeners(AuditingEntityListener.class)
