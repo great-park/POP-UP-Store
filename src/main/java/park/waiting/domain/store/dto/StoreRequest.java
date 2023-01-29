@@ -9,6 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 public class StoreRequest {
 
+    private Long managerId;
+
     private String name;
 
     private String phoneNumber;
@@ -19,8 +21,9 @@ public class StoreRequest {
 
     private String address;
 
-    public static StoreRequest of(StoreAddRequest storeAddRequest) {
+    public static StoreRequest of(Long managerId, StoreAddRequest storeAddRequest) {
         return StoreRequest.builder()
+                .managerId(managerId)
                 .name(storeAddRequest.getName())
                 .phoneNumber(storeAddRequest.getPhoneNumber())
                 .openStatus(storeAddRequest.getOpenStatus())
