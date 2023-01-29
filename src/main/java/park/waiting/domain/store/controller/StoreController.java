@@ -7,6 +7,7 @@ import park.waiting.common.dto.ApiDataResponse;
 import park.waiting.domain.store.dto.StoreAddRequest;
 import park.waiting.domain.store.dto.StoreRequest;
 import park.waiting.domain.store.dto.StoreResponse;
+import park.waiting.domain.store.entity.Store;
 import park.waiting.domain.store.service.StoreService;
 
 import java.util.List;
@@ -54,6 +55,15 @@ public class StoreController {
     ) {
         return ApiDataResponse.of(
                 storeService.updateStore(storeId, storeRequest)
+        );
+    }
+
+    @DeleteMapping("/{storeId}")
+    public ApiDataResponse<StoreResponse> removeStore(
+            @PathVariable("storeId") Long storeId
+    ) {
+        return ApiDataResponse.of(
+                storeService.removeStore(storeId)
         );
     }
 }

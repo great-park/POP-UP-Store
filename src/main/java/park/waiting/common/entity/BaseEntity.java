@@ -15,7 +15,8 @@ public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private boolean deleted;
+
+    private boolean active = true;
 
     @Column(nullable = false, insertable = false, updatable = false,
             columnDefinition = "datetime default CURRENT_TIMESTAMP")
@@ -27,7 +28,7 @@ public class BaseEntity {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    public void hide() {
-        this.setDeleted(true);
+    public void inactivate() {
+        this.setActive(false);
     }
 }
