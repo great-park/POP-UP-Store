@@ -58,4 +58,15 @@ public class StoreServiceImpl implements StoreService {
 //        manager.setStore(store);
         return store.toResponse();
     }
+
+    @Override
+    @Transactional
+    public StoreResponse updateStore(Long storeId, StoreRequest storeRequest) {
+        Store updateStore = storeRepository.findById(storeId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
+        updateStore.update(storeRequest);
+        storeRepository.save(updateStore);
+
+        return updateStore.toResponse();
+    }
 }

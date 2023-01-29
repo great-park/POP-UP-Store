@@ -21,16 +21,18 @@ public class StoreController {
 
     @GetMapping
     public ApiDataResponse<List<StoreResponse>> getStores() {
-        List<StoreResponse> stores = storeService.getStores();
-        return ApiDataResponse.of(stores);
+        return ApiDataResponse.of(
+                storeService.getStores()
+        );
     }
 
     @GetMapping("/{storeId}")
     public ApiDataResponse<StoreResponse> getStore(
             @PathVariable("storeId") Long storeId
     ) {
-        StoreResponse store = storeService.getStore(storeId);
-        return ApiDataResponse.of(store);
+        return ApiDataResponse.of(
+                storeService.getStore(storeId)
+        );
     }
 
     @PostMapping
@@ -40,9 +42,18 @@ public class StoreController {
         // Todo: token 통해서 managerId가져오기. 현재는 임시로 설정
         long tempManagerId = 1; //임시 대체
 
-        StoreRequest storeRequest = StoreRequest.of(tempManagerId, storeAddRequest);
-        StoreResponse storeResponse = storeService.addStore(storeRequest);
+        return ApiDataResponse.of(
+                storeService.addStore(StoreRequest.of(tempManagerId, storeAddRequest))
+        );
+    }
 
-        return ApiDataResponse.of(storeResponse);
+    @PatchMapping("/{storeId}")
+    public ApiDataResponse<StoreResponse> updateStore(
+            @PathVariable("storeId") Long storeId,
+            @RequestBody StoreRequest storeRequest
+    ) {
+        return ApiDataResponse.of(
+                storeService.updateStore(storeId, storeRequest)
+        );
     }
 }

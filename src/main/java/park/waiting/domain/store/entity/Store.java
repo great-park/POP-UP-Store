@@ -2,6 +2,7 @@ package park.waiting.domain.store.entity;
 
 import lombok.*;
 import park.waiting.common.entity.BaseEntity;
+import park.waiting.domain.store.dto.StoreRequest;
 import park.waiting.domain.store.dto.StoreResponse;
 import park.waiting.domain.store.status.OpenStatus;
 
@@ -36,4 +37,11 @@ public class Store  extends BaseEntity {
                 .build();
     }
 
+    public void update(StoreRequest storeRequest) {
+        this.name = storeRequest.getName();
+        this.phoneNumber = storeRequest.getPhoneNumber();
+        this.openStatus = OpenStatus.valueOf(storeRequest.getOpenStatus());
+        this.openHours = storeRequest.getOpenHours();
+        this.address = storeRequest.getAddress();
+    }
 }
