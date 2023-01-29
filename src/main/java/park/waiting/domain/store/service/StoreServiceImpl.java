@@ -29,6 +29,7 @@ public class StoreServiceImpl implements StoreService {
     public List<StoreResponse> getStores() {
         return storeRepository.findAll()
                 .stream()
+                .filter(Store::isActive)
                 .map(Store::toResponse)
                 .collect(Collectors.toList());
     }
@@ -37,6 +38,7 @@ public class StoreServiceImpl implements StoreService {
     @Transactional(readOnly = true)
     public StoreResponse getStore(Long storeId) {
         return storeRepository.findById(storeId)
+                .filter(Store::isActive)
                 .map(Store::toResponse)
                 .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
     }
@@ -68,5 +70,15 @@ public class StoreServiceImpl implements StoreService {
         storeRepository.save(updateStore);
 
         return updateStore.toResponse();
+    }
+
+    @Override
+    @Transactional
+    public StoreResponse removeStore(Long storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
+        store.inactivate();
+
+        return store.toResponse();
     }
 }

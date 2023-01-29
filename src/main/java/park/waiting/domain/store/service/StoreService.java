@@ -14,4 +14,6 @@ public interface StoreService {
     StoreResponse addStore(StoreRequest storeRequest);
 
     StoreResponse updateStore(Long storeId, StoreRequest storeRequest);
+
+    StoreResponse removeStore(Long storeId);
 }
