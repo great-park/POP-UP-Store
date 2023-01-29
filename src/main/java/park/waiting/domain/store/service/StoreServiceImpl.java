@@ -44,8 +44,9 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public StoreResponse addStore(StoreRequest storeRequest) {
-        Manager manager = managerRepository.findById(storeRequest.getManagerId())
-                .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
+        // 아직 인증 구현이 안 되었으므로 비활성화
+//        Manager manager = managerRepository.findById(storeRequest.getManagerId())
+//                .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
         Store addStore = Store.builder()
                 .address(storeRequest.getAddress())
                 .name(storeRequest.getName())
@@ -54,7 +55,7 @@ public class StoreServiceImpl implements StoreService {
                 .phoneNumber(storeRequest.getPhoneNumber())
                 .build();
         Store store = storeRepository.save(addStore);
-        manager.setStore(store);
+//        manager.setStore(store);
         return store.toResponse();
     }
 }
