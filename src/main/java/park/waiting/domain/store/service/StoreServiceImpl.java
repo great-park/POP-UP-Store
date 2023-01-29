@@ -6,9 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import park.waiting.common.constant.ErrorCode;
 import park.waiting.common.exception.GeneralException;
+import park.waiting.domain.store.dto.ProductRequest;
+import park.waiting.domain.store.dto.ProductResponse;
 import park.waiting.domain.store.dto.StoreRequest;
 import park.waiting.domain.store.dto.StoreResponse;
+import park.waiting.domain.store.entity.Product;
 import park.waiting.domain.store.entity.Store;
+import park.waiting.domain.store.repository.ProductRepository;
 import park.waiting.domain.store.repository.StoreRepository;
 import park.waiting.domain.store.status.OpenStatus;
 import park.waiting.domain.user.entity.Manager;
@@ -23,6 +27,7 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
     private final ManagerRepository managerRepository;
+    private final ProductRepository productRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -49,36 +54,75 @@ public class StoreServiceImpl implements StoreService {
         // 아직 인증 구현이 안 되었으므로 비활성화
 //        Manager manager = managerRepository.findById(storeRequest.getManagerId())
 //                .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
-        Store addStore = Store.builder()
+        Store addedStore = Store.builder()
                 .address(storeRequest.getAddress())
                 .name(storeRequest.getName())
                 .openStatus(OpenStatus.valueOf(storeRequest.getOpenStatus()))
                 .openHours(storeRequest.getOpenHours())
                 .phoneNumber(storeRequest.getPhoneNumber())
                 .build();
-        Store store = storeRepository.save(addStore);
 //        manager.setStore(store);
-        return store.toResponse();
+        return storeRepository.save(addedStore).toResponse();
     }
 
     @Override
     @Transactional
     public StoreResponse updateStore(Long storeId, StoreRequest storeRequest) {
-        Store updateStore = storeRepository.findById(storeId)
+        Store updatedStore = storeRepository.findById(storeId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
-        updateStore.update(storeRequest);
-        storeRepository.save(updateStore);
+        updatedStore.update(storeRequest);
 
-        return updateStore.toResponse();
+        return storeRepository.save(updatedStore).toResponse();
     }
 
     @Override
     @Transactional
     public StoreResponse removeStore(Long storeId) {
-        Store store = storeRepository.findById(storeId)
+        Store removedStore = storeRepository.findById(storeId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
-        store.inactivate();
+        removedStore.inactivate();
 
-        return store.toResponse();
+        return removedStore.toResponse();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductResponse> getProducts(Long storeId) {
+        return productRepository.findByStoreId(storeId).stream()
+                .filter(Product::isActive)
+                .map(Product::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public ProductResponse addProduct(ProductRequest productRequest) {
+        Store store = storeRepository.findById(productRequest.getStoreId())
+                .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
+        Product addedProduct = Product.builder()
+                .store(store)
+                .name(productRequest.getName())
+                .price(productRequest.getPrice())
+                .description(productRequest.getDescription())
+                .build();
+        return productRepository.save(addedProduct).toResponse();
+    }
+
+    @Override
+    @Transactional
+    public ProductResponse updateProduct(ProductRequest productRequest) {
+        Product updateProduct = productRepository.findById(productRequest.getProductId())
+                .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
+        updateProduct.update(productRequest);
+        return productRepository.save(updateProduct).toResponse();
+    }
+
+    @Override
+    public ProductResponse removeProduct(Long productId) {
+        Product removedProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
+        removedProduct.inactivate();
+
+        return removedProduct.toResponse();
     }
 }

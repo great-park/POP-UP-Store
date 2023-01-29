@@ -2,6 +2,7 @@ package park.waiting.domain.store.entity;
 
 import lombok.*;
 import park.waiting.common.entity.BaseEntity;
+import park.waiting.domain.store.dto.ProductRequest;
 import park.waiting.domain.store.dto.ProductResponse;
 
 import javax.persistence.CascadeType;
@@ -33,5 +34,11 @@ public class Product extends BaseEntity {
                 .price(price)
                 .description(description)
                 .build();
+    }
+
+    public void update(ProductRequest productRequest) {
+        this.name = productRequest.getName();
+        this.price = productRequest.getPrice();
+        this.description = productRequest.getDescription();
     }
 }
