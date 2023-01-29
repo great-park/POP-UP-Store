@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import park.waiting.common.dto.ApiDataResponse;
-import park.waiting.domain.store.dto.StoreAddRequest;
-import park.waiting.domain.store.dto.StoreRequest;
-import park.waiting.domain.store.dto.StoreResponse;
-import park.waiting.domain.store.entity.Store;
+import park.waiting.domain.store.dto.*;
 import park.waiting.domain.store.service.StoreService;
 
 import java.util.List;
@@ -66,4 +63,41 @@ public class StoreController {
                 storeService.removeStore(storeId)
         );
     }
+
+    @GetMapping("/products")
+    public ApiDataResponse<List<ProductResponse>> getProducts(
+            @RequestParam("storeId") Long storeId
+    ) {
+        return ApiDataResponse.of(
+                storeService.getProducts(storeId)
+        );
+    }
+
+    @PostMapping("/product")
+    public ApiDataResponse<ProductResponse> addProduct(
+            @RequestBody ProductRequest productRequest
+    ) {
+        return ApiDataResponse.of(
+                storeService.addProduct(productRequest)
+        );
+    }
+
+    @PatchMapping("/product")
+    public ApiDataResponse<ProductResponse> updateProduct(
+            @RequestBody ProductRequest productRequest
+    ) {
+        return ApiDataResponse.of(
+                storeService.updateProduct(productRequest)
+        );
+    }
+
+    @PatchMapping("/{productId}")
+    public ApiDataResponse<ProductResponse> removeProduct(
+            @PathVariable("productId") Long productId
+    ) {
+        return ApiDataResponse.of(
+                storeService.removeProduct(productId)
+        );
+    }
+
 }
