@@ -1,4 +1,4 @@
-package park.waiting.domain.user;
+package park.waiting.domain.user.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,31 +11,36 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @EqualsAndHashCode
-@Builder
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
+    @Setter
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
+    @Column(nullable = false, insertable = false, updatable = false,
+            columnDefinition = "datetime default CURRENT_TIMESTAMP")
     @CreatedDate
     private LocalDateTime createdAt;
 
+    @Column(nullable = false, insertable = false, updatable = false,
+            columnDefinition = "datetime default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private LocalDateTime modifiedAt;
 
-    protected User() {}
+    protected Customer() {}
 
-    protected User(String phoneNumber) {
+    protected Customer(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
     // static factory method로 사용하기 위해 생성자 lombok 사용 x
-    public static User of(String phoneNumber) {
-        return new User(phoneNumber);
+    public static Customer of(String phoneNumber) {
+        return new Customer(phoneNumber);
     }
 
 }
