@@ -12,4 +12,12 @@ public interface QueueService {
     QueueResponse getByCustomerId(Long customerId);
 
     QueueResponse appendTo(QueueRequest queueRequest);
+
+    int getLeftPeopleNumber(Long queueId);
+
+    void moveForward(Long storeId);
+
+    QueueResponse done(Long queueId);
+
+    QueueResponse cancel(Long queueId);
 }

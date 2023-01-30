@@ -3,7 +3,7 @@ package park.waiting.domain.queue.entity;
 import lombok.*;
 import park.waiting.common.entity.BaseEntity;
 import park.waiting.domain.queue.dto.QueueResponse;
-import park.waiting.domain.queue.status.QueueStatus;
+import park.waiting.domain.queue.status.WaitingStatus;
 import park.waiting.domain.store.entity.Store;
 import park.waiting.domain.user.entity.Customer;
 
@@ -17,7 +17,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Queue extends BaseEntity {
+public class Waiting extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
@@ -25,15 +25,16 @@ public class Queue extends BaseEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     private Store store;
 
-    private Long waitingCount;
+    private Long waitingCount; // 앞에 남아있는 대기 수
 
-    private QueueStatus queueStatus;
+    private WaitingStatus waitingStatus;
 
-    public static Queue of(Customer customer, Store store) {
-        return Queue.builder()
+    public static Waiting of(Customer customer, Store store, Long waitingCount) {
+        return Waiting.builder()
                 .customer(customer)
                 .store(store)
-                .queueStatus(QueueStatus.WAITING)
+                .waitingCount(waitingCount)
+                .waitingStatus(WaitingStatus.WAITING)
                 .build();
     }
 
@@ -44,7 +45,20 @@ public class Queue extends BaseEntity {
                 .customerName(customer.getName())
                 .phoneNumber(customer.getPhoneNumber())
                 .waitingCount(waitingCount)
-                .queueStatus(queueStatus)
+                .waitingStatus(waitingStatus)
                 .build();
+    }
+
+    public Waiting moveForward() {
+        this.waitingCount -= 1;
+        return this;
+    }
+
+    public void done() {
+        this.waitingStatus = WaitingStatus.DONE;
+    }
+
+    public void cancel() {
+        this.waitingStatus = WaitingStatus.CANCELED;
     }
 }

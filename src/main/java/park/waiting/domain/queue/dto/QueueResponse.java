@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Setter;
-import park.waiting.domain.queue.status.QueueStatus;
+import park.waiting.domain.queue.status.WaitingStatus;
 
 @Data
 @Setter(AccessLevel.NONE)
@@ -21,5 +21,5 @@ public class QueueResponse {
 
     private Long waitingCount;
 
-    private QueueStatus queueStatus;
+    private WaitingStatus waitingStatus;
 }
