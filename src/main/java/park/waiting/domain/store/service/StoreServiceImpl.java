@@ -15,7 +15,6 @@ import park.waiting.domain.store.entity.Store;
 import park.waiting.domain.store.repository.ProductRepository;
 import park.waiting.domain.store.repository.StoreRepository;
 import park.waiting.domain.store.status.OpenStatus;
-import park.waiting.domain.user.entity.Manager;
 import park.waiting.domain.user.repository.ManagerRepository;
 
 import java.util.List;
