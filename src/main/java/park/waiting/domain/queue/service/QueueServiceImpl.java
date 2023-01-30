@@ -9,10 +9,16 @@ import park.waiting.common.exception.GeneralException;
 import park.waiting.domain.queue.dto.QueueRequest;
 import park.waiting.domain.queue.dto.QueueResponse;
 import park.waiting.domain.queue.entity.Queue;
+import park.waiting.domain.queue.exception.DuplicatedQueueAppendException;
 import park.waiting.domain.queue.repository.QueueRepository;
 import park.waiting.domain.queue.status.QueueStatus;
+import park.waiting.domain.store.entity.Store;
+import park.waiting.domain.store.repository.StoreRepository;
+import park.waiting.domain.user.entity.Customer;
+import park.waiting.domain.user.repository.CustomerRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -21,6 +27,8 @@ import java.util.stream.Collectors;
 public class QueueServiceImpl implements QueueService{
 
     private final QueueRepository queueRepository;
+    private final CustomerRepository customerRepository;
+    private final StoreRepository storeRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -32,6 +40,7 @@ public class QueueServiceImpl implements QueueService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public QueueResponse getByCustomerId(Long customerId) {
         return queueRepository.findByCustomerIdAndQueueStatusIs(customerId, QueueStatus.WAITING)
                 .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR))
@@ -39,7 +48,16 @@ public class QueueServiceImpl implements QueueService{
     }
 
     @Override
+    @Transactional
     public QueueResponse appendTo(QueueRequest queueRequest) {
-        return null;
+        Customer customer = customerRepository.findById(queueRequest.getCustomerId())
+                .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
+        Store store = storeRepository.findById(queueRequest.getStoreId())
+                .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
+
+        Queue checkDuplicate = queueRepository.findByCustomerIdAndQueueStatusIs(customer.getId(), QueueStatus.WAITING)
+                .orElseThrow(DuplicatedQueueAppendException::new);
+        Queue queue = queueRepository.save(Queue.of(customer, store));
+        return queue.toResponse();
     }
 }
