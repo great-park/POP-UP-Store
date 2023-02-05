@@ -2,14 +2,12 @@ package park.waiting.domain.store.service;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import park.waiting.common.constant.ErrorCode;
 import park.waiting.common.exception.GeneralException;
-import park.waiting.domain.store.dto.ProductRequest;
-import park.waiting.domain.store.dto.ProductResponse;
-import park.waiting.domain.store.dto.StoreRequest;
-import park.waiting.domain.store.dto.StoreResponse;
+import park.waiting.domain.store.dto.*;
 import park.waiting.domain.store.entity.Product;
 import park.waiting.domain.store.entity.Store;
 import park.waiting.domain.store.repository.ProductRepository;
@@ -20,6 +18,7 @@ import park.waiting.domain.user.repository.ManagerRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class StoreServiceImpl implements StoreService {
@@ -95,14 +94,14 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public ProductResponse addProduct(ProductRequest productRequest) {
-        Store store = storeRepository.findById(productRequest.getStoreId())
+    public ProductResponse addProduct(ProductAddRequest productAddRequest) {
+        Store store = storeRepository.findById(productAddRequest.getStoreId())
                 .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
         Product addedProduct = Product.builder()
                 .store(store)
-                .name(productRequest.getName())
-                .price(productRequest.getPrice())
-                .description(productRequest.getDescription())
+                .name(productAddRequest.getName())
+                .price(productAddRequest.getPrice())
+                .description(productAddRequest.getDescription())
                 .build();
         return productRepository.save(addedProduct).toResponse();
     }

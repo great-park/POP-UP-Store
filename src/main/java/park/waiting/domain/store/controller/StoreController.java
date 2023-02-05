@@ -45,7 +45,7 @@ public class StoreController {
         );
     }
 
-    @PatchMapping("/{storeId}")
+    @PatchMapping("/update/{storeId}")
     public ApiDataResponse<StoreResponse> updateStore(
             @PathVariable("storeId") Long storeId,
             @RequestBody StoreRequest storeRequest
@@ -55,7 +55,7 @@ public class StoreController {
         );
     }
 
-    @DeleteMapping("/{storeId}")
+    @DeleteMapping("/delete/{storeId}")
     public ApiDataResponse<StoreResponse> removeStore(
             @PathVariable("storeId") Long storeId
     ) {
@@ -75,10 +75,10 @@ public class StoreController {
 
     @PostMapping("/product")
     public ApiDataResponse<ProductResponse> addProduct(
-            @RequestBody ProductRequest productRequest
+            @RequestBody ProductAddRequest productAddRequest
     ) {
         return ApiDataResponse.of(
-                storeService.addProduct(productRequest)
+                storeService.addProduct(productAddRequest)
         );
     }
 
@@ -91,7 +91,7 @@ public class StoreController {
         );
     }
 
-    @PatchMapping("/{productId}")
+    @DeleteMapping("/product/{productId}")
     public ApiDataResponse<ProductResponse> removeProduct(
             @PathVariable("productId") Long productId
     ) {
