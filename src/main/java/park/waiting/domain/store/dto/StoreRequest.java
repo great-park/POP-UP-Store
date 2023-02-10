@@ -1,6 +1,7 @@
 package park.waiting.domain.store.dto;
 
 import lombok.*;
+import park.waiting.domain.store.status.OpenStatus;
 
 @Data
 @Setter(AccessLevel.NONE)
@@ -15,7 +16,7 @@ public class StoreRequest {
 
     private String phoneNumber;
 
-    private String openStatus;
+    private OpenStatus openStatus;
 
     private String openHours;
 

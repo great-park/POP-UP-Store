@@ -55,7 +55,7 @@ public class StoreServiceImpl implements StoreService {
         Store addedStore = Store.builder()
                 .address(storeRequest.getAddress())
                 .name(storeRequest.getName())
-                .openStatus(OpenStatus.valueOf(storeRequest.getOpenStatus()))
+                .openStatus(storeRequest.getOpenStatus())
                 .openHours(storeRequest.getOpenHours())
                 .phoneNumber(storeRequest.getPhoneNumber())
                 .build();

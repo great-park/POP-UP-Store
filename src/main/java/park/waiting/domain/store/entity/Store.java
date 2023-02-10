@@ -40,7 +40,7 @@ public class Store  extends BaseEntity {
     public void update(StoreRequest storeRequest) {
         this.name = storeRequest.getName();
         this.phoneNumber = storeRequest.getPhoneNumber();
-        this.openStatus = OpenStatus.valueOf(storeRequest.getOpenStatus());
+        this.openStatus = storeRequest.getOpenStatus();
         this.openHours = storeRequest.getOpenHours();
         this.address = storeRequest.getAddress();
     }
