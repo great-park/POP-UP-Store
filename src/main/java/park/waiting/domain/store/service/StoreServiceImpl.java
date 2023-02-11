@@ -112,7 +112,9 @@ public class StoreServiceImpl implements StoreService {
         Product updateProduct = productRepository.findById(productRequest.getProductId())
                 .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
         updateProduct.update(productRequest);
-        return productRepository.save(updateProduct).toResponse();
+        productRepository.save(updateProduct);
+
+        return updateProduct.toResponse();
     }
 
     @Override
