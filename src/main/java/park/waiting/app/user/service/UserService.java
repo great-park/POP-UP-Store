@@ -4,13 +4,13 @@ import park.waiting.app.user.dto.*;
 
 public interface UserService {
 
-    CustomerResponse signup(CustomerRequest customerRequest);
+    CustomerResponse signUp(CustomerRequest customerRequest);
 
     CustomerResponse signIn(String phoneNumber);
 
-    CustomerResponse updateName(CustomerRequest customerRequest);
+    CustomerResponse updateName(CustomerUpdateNameRequest updateNameRequest);
 
-    ManagerResponse adminSignup(ManagerRequest managerRequest);
+    ManagerResponse adminSignUp(ManagerRequest managerRequest);
 
     ManagerResponse adminSignIn(ManagerSignInRequest managerSignInRequest);
 }
