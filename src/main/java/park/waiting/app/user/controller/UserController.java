@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import park.waiting.app.common.dto.ApiDataResponse;
-import park.waiting.app.user.dto.CustomerRequest;
-import park.waiting.app.user.dto.CustomerResponse;
-import park.waiting.app.user.dto.ManagerRequest;
-import park.waiting.app.user.dto.ManagerResponse;
+import park.waiting.app.user.dto.*;
 import park.waiting.app.user.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,4 +33,27 @@ public class UserController {
 
         return ApiDataResponse.of(customerResponse);
     }
+
+    @PostMapping("/admin-sign-up")
+    public ApiDataResponse<ManagerResponse> adminSignUp(
+            @RequestBody ManagerRequest managerRequest
+    ) {
+        return ApiDataResponse.of(
+                userService.adminSignUp(managerRequest)
+        );
+    }
+
+    @PostMapping("/admin-sign-in")
+    public ApiDataResponse<ManagerResponse> adminSignIn(
+            @RequestBody ManagerSignInRequest signInRequest,
+            HttpServletRequest request
+    ) {
+        ManagerResponse managerResponse = userService.adminSignIn(signInRequest);
+
+        HttpSession session = request.getSession();
+        session.setAttribute("AUTH_ADMIN", managerResponse);
+
+        return ApiDataResponse.of(managerResponse);
+    }
+
 }
