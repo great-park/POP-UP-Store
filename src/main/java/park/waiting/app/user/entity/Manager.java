@@ -18,7 +18,7 @@ public class Manager extends BaseEntity {
 
     private String email;
 
-    private String password;
+    private String hashed_password;
 
     private String phoneNumber;
 

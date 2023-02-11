@@ -6,14 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import park.waiting.app.common.constant.ErrorCode;
 import park.waiting.app.common.exception.GeneralException;
-import park.waiting.app.user.dto.CustomerRequest;
-import park.waiting.app.user.dto.CustomerResponse;
-import park.waiting.app.user.dto.ManagerRequest;
-import park.waiting.app.user.dto.ManagerResponse;
+import park.waiting.app.user.dto.*;
 import park.waiting.app.user.entity.Customer;
-import park.waiting.app.user.exception.SignUpException;
+import park.waiting.app.user.entity.Manager;
+import park.waiting.app.user.exception.AuthException;
 import park.waiting.app.user.repository.CustomerRepository;
 import park.waiting.app.user.repository.ManagerRepository;
+import park.waiting.app.util.CustomPasswordEncoder;
 
 import java.util.Optional;
 
@@ -69,19 +68,49 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public ManagerResponse adminSignup(ManagerRequest managerRequest) {
-        return null;
+        validateEmailIsDuplicated(managerRequest.getEmail());
+
+        Manager manager = Manager.builder()
+                .email(managerRequest.getEmail())
+                .hashed_password(CustomPasswordEncoder.hashPassword(managerRequest.getPassword()))
+                .name(managerRequest.getName())
+                .phoneNumber(managerRequest.getPhoneNumber())
+                .build();
+        Manager createdManager = managerRepository.save(manager);
+
+        return createdManager.toResponse();
     }
 
     @Transactional
     @Override
-    public ManagerResponse adminSignIn(ManagerRequest managerRequest) {
-        return null;
+    public ManagerResponse adminSignIn(ManagerSignInRequest managerSignInRequest) {
+        Manager manager = managerRepository.findByEmail(managerSignInRequest.getEmail())
+                .orElseThrow(() -> new AuthException(ErrorCode.MANAGER_NOT_FOUND));
+        validatePassword(managerSignInRequest.getPassword(), manager);
+
+        return manager.toResponse();
+    }
+
+    private void validatePassword(String password, Manager manager) {
+        boolean isMatched = CustomPasswordEncoder.isMatched(
+                password,
+                manager.getHashed_password());
+        if (!isMatched) {
+            throw new AuthException(ErrorCode.PASSWORD_MISMATCHED);
+        }
     }
 
     private void validatePhoneNumberIsDuplicated(String phoneNumber) {
         boolean isDuplicated = customerRepository.findByPhoneNumber(phoneNumber).isPresent();
         if (isDuplicated) {
-            throw new SignUpException(ErrorCode.DUPLICATE_PHONE_NUMBER);
+            throw new AuthException(ErrorCode.DUPLICATE_PHONE_NUMBER);
+        }
+    }
+
+    private void validateEmailIsDuplicated(String email) {
+        boolean isDuplicated = managerRepository.findByEmail(email).isPresent();
+        if (isDuplicated) {
+            throw new AuthException(ErrorCode.DUPLICATE_EMAIL);
         }
     }
 

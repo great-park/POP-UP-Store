@@ -24,7 +24,10 @@ public enum ErrorCode {
     SPRING_INTERNAL_ERROR(20001, HttpStatus.INTERNAL_SERVER_ERROR, "Spring-detected internal error"),
     DATA_ACCESS_ERROR(20002, HttpStatus.INTERNAL_SERVER_ERROR, "Data access error"),
 
-    DUPLICATE_PHONE_NUMBER(30000, HttpStatus.BAD_REQUEST, "duplicated phone number")
+    DUPLICATE_PHONE_NUMBER(30000, HttpStatus.BAD_REQUEST, "duplicated phone number"),
+    DUPLICATE_EMAIL(30001, HttpStatus.BAD_REQUEST, "duplicated email"),
+    MANAGER_NOT_FOUND(30002, HttpStatus.BAD_REQUEST, "manager not found"),
+    PASSWORD_MISMATCHED(30003, HttpStatus.BAD_REQUEST, "password mismatch"),
     ;
 
     private final Integer code;
