@@ -1,4 +1,4 @@
-package park.waiting.app.util;
+package park.waiting.app.auth;
 
 import lombok.extern.slf4j.Slf4j;
 

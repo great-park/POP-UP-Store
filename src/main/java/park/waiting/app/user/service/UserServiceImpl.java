@@ -12,7 +12,7 @@ import park.waiting.app.user.entity.Manager;
 import park.waiting.app.user.exception.AuthException;
 import park.waiting.app.user.repository.CustomerRepository;
 import park.waiting.app.user.repository.ManagerRepository;
-import park.waiting.app.util.CustomPasswordEncoder;
+import park.waiting.app.auth.CustomPasswordEncoder;
 
 import java.util.Optional;
 
