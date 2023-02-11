@@ -26,10 +26,10 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public CustomerResponse signup(CustomerRequest customerRequest) {
+    public CustomerResponse signUp(CustomerRequest customerRequest) {
         validatePhoneNumberIsDuplicated(customerRequest.getPhoneNumber());
         Customer customer = Customer.builder()
-                .name(customerRequest.getName())
+                .name(createRandomName())
                 .phoneNumber(customerRequest.getPhoneNumber())
                 .build();
         Customer createdCustomer = customerRepository.save(customer);
@@ -45,11 +45,10 @@ public class UserServiceImpl implements UserService{
         // 자동 회원가입 - 랜덤 닉네임 부여
         if (customer.isEmpty()) {
             CustomerRequest createRequest = CustomerRequest.builder()
-                    .name(createRandomName())
                     .phoneNumber(phoneNumber)
                     .build();
 
-            return signup(createRequest);
+            return signUp(createRequest);
         }
 
         return customer.get().toResponse();
@@ -57,17 +56,17 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public CustomerResponse updateName(CustomerRequest customerRequest) {
-        Customer customer = customerRepository.findByPhoneNumber(customerRequest.getPhoneNumber())
+    public CustomerResponse updateName(CustomerUpdateNameRequest updateNameRequest) {
+        Customer customer = customerRepository.findByPhoneNumber(updateNameRequest.getPhoneNumber())
                 .orElseThrow(() -> new GeneralException(ErrorCode.DATA_ACCESS_ERROR));
-        customer.setName(customerRequest.getName());
+        customer.setName(updateNameRequest.getName());
 
         return customer.toResponse();
     }
 
     @Transactional
     @Override
-    public ManagerResponse adminSignup(ManagerRequest managerRequest) {
+    public ManagerResponse adminSignUp(ManagerRequest managerRequest) {
         validateEmailIsDuplicated(managerRequest.getEmail());
 
         Manager manager = Manager.builder()
