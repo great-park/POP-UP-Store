@@ -12,10 +12,12 @@ import java.io.Serializable;
 @Builder
 public class ManagerResponse implements Serializable {
     private Long id;
+
     private Long storeId;
 
     private String email;
 
     private String phoneNumber;
+
     private String name;
 }

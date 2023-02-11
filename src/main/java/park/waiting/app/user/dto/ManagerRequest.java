@@ -9,7 +9,11 @@ import lombok.*;
 @Builder
 public class ManagerRequest {
     private String email;
+
     private String name;
+
     private String password;
+
     private String phoneNumber;
+
 }

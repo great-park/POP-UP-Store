@@ -9,5 +9,7 @@ import lombok.*;
 @Builder
 public class CustomerRequest {
 
+    private String name;
+
     private String phoneNumber;
 }
