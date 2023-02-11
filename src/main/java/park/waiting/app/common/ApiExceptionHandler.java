@@ -1,4 +1,4 @@
-package park.waiting.app.common.exception;
+package park.waiting.app.common;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
