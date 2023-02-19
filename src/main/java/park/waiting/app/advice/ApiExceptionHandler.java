@@ -1,4 +1,4 @@
-package park.waiting.app.common;
+package park.waiting.app.advice;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
